@@ -3,6 +3,7 @@ import re
 import json
 
 PLAYLIST_URLS = [
+    # --- LISTAS ORIGINALES (58) ---
     "http://playtvch.lat:8080/get.php?username=zcenter419&password=2024329865&type=m3u_plus",
     "http://playtvch.lat:8080/get.php?username=RetamalClaudio22&password=aEeaajWuT4Fv&type=m3u_plus",
     "http://playtvch.lat:8080/get.php?username=rodrigoobreque2&password=927481891&type=m3u_plus",
@@ -60,11 +61,58 @@ PLAYLIST_URLS = [
     "http://playtvch.lat:8080/get.php?username=56952540870faceztv&password=Casa4663&type=m3u_plus",
     "http://playtvch.lat:8080/get.php?username=56961917223wspztv&password=20122024ztv&type=m3u_plus",
     "http://playtvch.lat:8080/get.php?username=ramon45&password=202020&type=m3u_plus",
-    "http://playtvch.lat:8080/get.php?username=56990795612wspztv&password=150123ztv&type=m3u_plus"
+    "http://playtvch.lat:8080/get.php?username=56990795612wspztv&password=150123ztv&type=m3u_plus",
+
+    # --- NUEVAS LISTAS (46) ---
+    "http://zonalatina.xyz:80/get.php?username=12812507396&password=270222zero&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=christiangonzalezgonzalez&password=56962313447ztv&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=6533pro5686&password=pa289ss563&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=56976915910wspztv&password=220622ztv&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=56989918645zero&password=080923zero&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=Hugocerpa1847&password=Chiletv1847&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=CarlosGonzales416&password=FMFrzZGbGL&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=SergioMarcoleta380&password=Chiletv380&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=56983589845wspzero&password=200821zero&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=56931486071faceztv&password=22042023ztv&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=mendozari567832&password=567832mendozari&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=56931486071faceztv&password=22042023ztv&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=56988997338wspztv&password=020324ztv&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=CesarLeon&password=hGGK2W2KxKQK&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=usuario1031&password=1a2b7r47k&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=12812507396&password=270222zero&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=cheriepoggini&password=DHNJBFejUa&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=Ricardo1234&password=R3c1rd42&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=56977938205wspzero&password=310324zero&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=12812507396&password=270222zero&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=56931486071faceztv&password=22042023ztv&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=56977938205wspzero&password=310324zero&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=Ricardo1234&password=R3c1rd42&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=LupyRojas&password=Daniela1998lupy&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=cheriepoggini&password=DHNJBFejUa&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=usuario1031&password=1a2b7r47k&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=usuario1061&password=1a5nv25g1y&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=usuario2011&password=gg54yy76re&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=usuario1048&password=fa14hg89vc&type=m3u_plus",
+    "http://zonalatina.xyz:80/get.php?username=NmsHbKPxXQ&password=t8jHWW5uYy&type=m3u_plus",
+    "http://dalive.site:8080/get.php?username=JorgeLeon&password=JorgeLeon&type=m3u_plus",
+    "http://dalive.site:8080/get.php?username=Sarita&password=Sarita&type=m3u_plus",
+    "http://dalive.site:8080/get.php?username=Demoluisfuentealba01&password=94yzwDN2Lv6I9TG3vUX&type=m3u_plus",
+    "http://dalive.site:8080/get.php?username=Pepe&password=1234&type=m3u_plus",
+    "http://dalive.site:8080/get.php?username=56964319607&password=SRY339fuPh&type=m3u_plus",
+    "http://dalive.site:8080/get.php?username=ZONATV19334&password=8WZUC6pcu2&type=m3u_plus",
+    "http://dalive.site:8080/get.php?username=252525&password=252525&type=m3u_plus",
+    "http://dalive.site:8080/get.php?username=iptv10888&password=vAZqL37PBfjw&type=m3u_plus",
+    "http://dalive.site:8080/get.php?username=NOVA73R45&password=rEpYABmMbDMw&type=m3u_plus",
+    "http://dalive.site:8080/get.php?username=Omarprosop&password=1347339e05&type=m3u_plus",
+    "http://tvq.lat:8080/get.php?username=Cristianvelasquez&password=56957188630&type=m3u_plus",
+    "http://tvq.lat:8080/get.php?username=JoRDaN25sept25&password=castro25sept25&type=m3u_plus",
+    "http://tvq.lat:8080/get.php?username=Nubexapoyo2024&password=tXD9QwZuLftA&type=m3u_plus",
+    "http://tvq.lat:8080/get.php?username=Patriciovilches&password=56949603294&type=m3u_plus",
+    "http://tvq.lat:8080/get.php?username=rs7621345&password=ZXWG3WppBhx4&type=m3u_plus",
+    "http://tvq.lat:8080/get.php?username=rslamtv&password=SNA8mxMqqHLd&type=m3u_plus"
 ]
 
 def clean_series_title(name):
-    # Corta el nombre de la serie eliminando S01 E01 o S01E01 para agruparlas
     match = re.search(r'(?i)\s*S\d+\s*E\d+', name)
     if match:
         return name[:match.start()].strip()
@@ -98,14 +146,10 @@ def parse_m3u_from_url(url):
                     
                     name_match = re.search(r',(.+)$', current_inf)
                     name = name_match.group(1).strip() if name_match else "Desconocido"
-                    
                     group_match = re.search(r'group-title="([^"]+)"', current_inf, re.IGNORECASE)
                     group = group_match.group(1).strip() if group_match else "General"
-                    
                     logo_match = re.search(r'tvg-logo="([^"]+)"', current_inf, re.IGNORECASE)
                     logo = logo_match.group(1).strip() if logo_match else ""
-                    
-                    # AQUÍ SE EXTRAE LA SINOPSIS QUE PEDISTE
                     plot_match = re.search(r'(?:description|plot|tvg-desc)="([^"]+)"', current_inf, re.IGNORECASE)
                     synopsis = plot_match.group(1).strip() if plot_match else ""
                     
@@ -113,7 +157,6 @@ def parse_m3u_from_url(url):
                     name_lower = name.lower()
                     url_lower = url_stream.lower()
                     
-                    # SE AGREGA LA SINOPSIS AL DICCIONARIO
                     item = { "name": name, "url": url_stream, "group": group, "logo": logo, "synopsis": synopsis }
                     
                     # 1. Adultos
@@ -126,16 +169,16 @@ def parse_m3u_from_url(url):
                             item["seriesTitle"] = clean_series_title(name)
                         anime.append(item)
                         
-                    # 3. Series
-                    elif "serie" in group_lower or "temporada" in group_lower or re.search(r'(?i)S\d+\s*E\d+', name) or "/series/" in url_lower:
+                    # 3. Xtream Codes Series o S01E01
+                    elif "/series/" in url_lower or re.search(r'(?i)S\d+\s*E\d+', name):
                         item["seriesTitle"] = clean_series_title(name)
                         series.append(item)
                         
-                    # 4. Películas (Palabras clave de VOD)
-                    elif any(k in group_lower for k in ["pelicula", "películas", "vod", "estreno", "cine", "terror", "accion", "infantil", "comedia", "drama", "ficcion"]) or "/movie/" in url_lower or url_lower.endswith(('.mp4', '.mkv', '.avi')):
+                    # 4. Xtream Codes Películas o VOD (Si el grupo es PELICULAS, VOD, o el enlace tiene /movie/ o termina en mp4/mkv)
+                    elif "/movie/" in url_lower or url_lower.endswith(('.mp4', '.mkv', '.avi', '.m4v')) or "pelicula" in group_lower or "vod" in group_lower or "estreno" in group_lower or "cine" in group_lower:
                         movies.append(item)
                         
-                    # 5. TV en Vivo (Canales normales)
+                    # 5. Todo lo demás se considera TV en Vivo (Canales normales de Xtream Codes)
                     else:
                         live.append(item)
                         
@@ -155,7 +198,7 @@ def main():
         all_anime.extend(an)
         all_adult.extend(a)
         
-    # Deduplicación por nombre
+    # Deduplicación por nombre para no tener el mismo canal o película repetida 20 veces
     catalog = {
         "live": list({l['name']: l for l in all_live}.values()),
         "movies": list({m['name']: m for m in all_movies}.values()),
@@ -166,6 +209,7 @@ def main():
     
     with open("vod_catalog.json", "w", encoding="utf-8") as f:
         json.dump(catalog, f, ensure_ascii=False, indent=2)
+    print("Catálogo actualizado y deduplicado con 104 listas.")
 
 if __name__ == "__main__":
     main()
