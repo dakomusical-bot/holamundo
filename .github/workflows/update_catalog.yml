@@ -21,7 +21,7 @@ jobs:
           python-version: '3.10'
 
       - name: Ejecutar Script de Optimización
-        run: python optimizador.py
+        run: python optimizer.py
 
       - name: Subir cambios a GitHub
         run: |
