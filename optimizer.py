@@ -2,7 +2,6 @@ import urllib.request
 import re
 import json
 
-# Tus 58 listas M3U integradas
 PLAYLIST_URLS = [
     "http://playtvch.lat:8080/get.php?username=zcenter419&password=2024329865&type=m3u_plus",
     "http://playtvch.lat:8080/get.php?username=RetamalClaudio22&password=aEeaajWuT4Fv&type=m3u_plus",
@@ -106,11 +105,16 @@ def parse_m3u_from_url(url):
                     logo_match = re.search(r'tvg-logo="([^"]+)"', current_inf, re.IGNORECASE)
                     logo = logo_match.group(1).strip() if logo_match else ""
                     
+                    # AQUÍ SE EXTRAE LA SINOPSIS QUE PEDISTE
+                    plot_match = re.search(r'(?:description|plot|tvg-desc)="([^"]+)"', current_inf, re.IGNORECASE)
+                    synopsis = plot_match.group(1).strip() if plot_match else ""
+                    
                     group_lower = group.lower()
                     name_lower = name.lower()
                     url_lower = url_stream.lower()
                     
-                    item = { "name": name, "url": url_stream, "group": group, "logo": logo }
+                    # SE AGREGA LA SINOPSIS AL DICCIONARIO
+                    item = { "name": name, "url": url_stream, "group": group, "logo": logo, "synopsis": synopsis }
                     
                     # 1. Adultos
                     if any(x in group_lower or x in name_lower for x in ["xxx", "+18", "adultos", "hot", "playboy"]):
@@ -118,7 +122,6 @@ def parse_m3u_from_url(url):
                         
                     # 2. Anime
                     elif "anime" in group_lower or "anime" in name_lower:
-                        # Si tiene formato de serie, guardamos el nombre base
                         if re.search(r'(?i)S\d+\s*E\d+', name) or re.search(r'(?i)Cap[ií]tulo', name):
                             item["seriesTitle"] = clean_series_title(name)
                         anime.append(item)
@@ -137,7 +140,7 @@ def parse_m3u_from_url(url):
                         live.append(item)
                         
     except Exception as e:
-        print(f"Error procesando: {e}")
+        print(f"Error procesando {url}: {e}")
         
     return live, movies, series, anime, adult
 
