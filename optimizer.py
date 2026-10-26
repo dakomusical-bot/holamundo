@@ -64,9 +64,21 @@ PLAYLIST_URLS = [
     "http://playtvch.lat:8080/get.php?username=56990795612wspztv&password=150123ztv&type=m3u_plus"
 ]
 
+def clean_series_title(name):
+    # Corta el nombre de la serie eliminando S01 E01 o S01E01 para agruparlas
+    match = re.search(r'(?i)\s*S\d+\s*E\d+', name)
+    if match:
+        return name[:match.start()].strip()
+    match2 = re.search(r'(?i)\s*Cap[ií]tulo\s*\d+', name)
+    if match2:
+        return name[:match2.start()].strip()
+    return name
+
 def parse_m3u_from_url(url):
+    live = []
     movies = []
     series = []
+    anime = []
     adult = []
     
     try:
@@ -92,52 +104,65 @@ def parse_m3u_from_url(url):
                     group = group_match.group(1).strip() if group_match else "General"
                     
                     logo_match = re.search(r'tvg-logo="([^"]+)"', current_inf, re.IGNORECASE)
-                    logo = logo_match.group(1).strip() if logo_match else None
+                    logo = logo_match.group(1).strip() if logo_match else ""
                     
-                    item = {
-                        "name": name,
-                        "url": url_stream,
-                        "group": group,
-                        "logo": logo
-                    }
+                    group_lower = group.lower()
+                    name_lower = name.lower()
+                    url_lower = url_stream.lower()
                     
-                    is_adult = any(x in group.lower() or x in name.lower() for x in ["xxx", "+18", "adultos", "hot"])
+                    item = { "name": name, "url": url_stream, "group": group, "logo": logo }
                     
-                    if is_adult:
+                    # 1. Adultos
+                    if any(x in group_lower or x in name_lower for x in ["xxx", "+18", "adultos", "hot", "playboy"]):
                         adult.append(item)
-                    elif "/series/" in url_stream.lower() or "serie" in group.lower():
+                        
+                    # 2. Anime
+                    elif "anime" in group_lower or "anime" in name_lower:
+                        # Si tiene formato de serie, guardamos el nombre base
+                        if re.search(r'(?i)S\d+\s*E\d+', name) or re.search(r'(?i)Cap[ií]tulo', name):
+                            item["seriesTitle"] = clean_series_title(name)
+                        anime.append(item)
+                        
+                    # 3. Series
+                    elif "serie" in group_lower or "temporada" in group_lower or re.search(r'(?i)S\d+\s*E\d+', name) or "/series/" in url_lower:
+                        item["seriesTitle"] = clean_series_title(name)
                         series.append(item)
-                    else:
+                        
+                    # 4. Películas (Palabras clave de VOD)
+                    elif any(k in group_lower for k in ["pelicula", "películas", "vod", "estreno", "cine", "terror", "accion", "infantil", "comedia", "drama", "ficcion"]) or "/movie/" in url_lower or url_lower.endswith(('.mp4', '.mkv', '.avi')):
                         movies.append(item)
+                        
+                    # 5. TV en Vivo (Canales normales)
+                    else:
+                        live.append(item)
+                        
     except Exception as e:
-        print(f"Error procesando {url}: {e}")
+        print(f"Error procesando: {e}")
         
-    return movies, series, adult
+    return live, movies, series, anime, adult
 
 def main():
-    all_movies = []
-    all_series = []
-    all_adult = []
+    all_live, all_movies, all_series, all_anime, all_adult = [], [], [], [], []
     
     for url in PLAYLIST_URLS:
-        m, s, a = parse_m3u_from_url(url)
+        l, m, s, an, a = parse_m3u_from_url(url)
+        all_live.extend(l)
         all_movies.extend(m)
         all_series.extend(s)
+        all_anime.extend(an)
         all_adult.extend(a)
         
-    unique_movies = {m['name'].lower(): m for m in all_movies}.values()
-    unique_series = {s['name'].lower(): s for s in all_series}.values()
-    unique_adult = {a['name'].lower(): a for a in all_adult}.values()
-    
+    # Deduplicación por nombre
     catalog = {
-        "movies": list(unique_movies),
-        "series": list(unique_series),
-        "adult": list(unique_adult)
+        "live": list({l['name']: l for l in all_live}.values()),
+        "movies": list({m['name']: m for m in all_movies}.values()),
+        "series": list({s['name']: s for s in all_series}.values()),
+        "anime": list({an['name']: an for an in all_anime}.values()),
+        "adult": list({a['name']: a for a in all_adult}.values())
     }
     
     with open("vod_catalog.json", "w", encoding="utf-8") as f:
         json.dump(catalog, f, ensure_ascii=False, indent=2)
-    print("¡Catálogo VOD optimizado generado con éxito!")
 
 if __name__ == "__main__":
     main()
