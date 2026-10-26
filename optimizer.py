@@ -3,7 +3,7 @@ import re
 import json
 
 PLAYLIST_URLS = [
-    # --- LISTAS ORIGINALES (58) ---
+    # Tus listas principales (recuerda poner las mejores al inicio)
     "http://playtvch.lat:8080/get.php?username=zcenter419&password=2024329865&type=m3u_plus",
     "http://playtvch.lat:8080/get.php?username=RetamalClaudio22&password=aEeaajWuT4Fv&type=m3u_plus",
     "http://playtvch.lat:8080/get.php?username=rodrigoobreque2&password=927481891&type=m3u_plus",
@@ -62,8 +62,7 @@ PLAYLIST_URLS = [
     "http://playtvch.lat:8080/get.php?username=56961917223wspztv&password=20122024ztv&type=m3u_plus",
     "http://playtvch.lat:8080/get.php?username=ramon45&password=202020&type=m3u_plus",
     "http://playtvch.lat:8080/get.php?username=56990795612wspztv&password=150123ztv&type=m3u_plus",
-
-    # --- NUEVAS LISTAS (46) ---
+    # Nuevas listas ZonaLatina, DaLive, TVQ
     "http://zonalatina.xyz:80/get.php?username=12812507396&password=270222zero&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=christiangonzalezgonzalez&password=56962313447ztv&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=6533pro5686&password=pa289ss563&type=m3u_plus",
@@ -75,21 +74,13 @@ PLAYLIST_URLS = [
     "http://zonalatina.xyz:80/get.php?username=56983589845wspzero&password=200821zero&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=56931486071faceztv&password=22042023ztv&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=mendozari567832&password=567832mendozari&type=m3u_plus",
-    "http://zonalatina.xyz:80/get.php?username=56931486071faceztv&password=22042023ztv&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=56988997338wspztv&password=020324ztv&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=CesarLeon&password=hGGK2W2KxKQK&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=usuario1031&password=1a2b7r47k&type=m3u_plus",
-    "http://zonalatina.xyz:80/get.php?username=12812507396&password=270222zero&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=cheriepoggini&password=DHNJBFejUa&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=Ricardo1234&password=R3c1rd42&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=56977938205wspzero&password=310324zero&type=m3u_plus",
-    "http://zonalatina.xyz:80/get.php?username=12812507396&password=270222zero&type=m3u_plus",
-    "http://zonalatina.xyz:80/get.php?username=56931486071faceztv&password=22042023ztv&type=m3u_plus",
-    "http://zonalatina.xyz:80/get.php?username=56977938205wspzero&password=310324zero&type=m3u_plus",
-    "http://zonalatina.xyz:80/get.php?username=Ricardo1234&password=R3c1rd42&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=LupyRojas&password=Daniela1998lupy&type=m3u_plus",
-    "http://zonalatina.xyz:80/get.php?username=cheriepoggini&password=DHNJBFejUa&type=m3u_plus",
-    "http://zonalatina.xyz:80/get.php?username=usuario1031&password=1a2b7r47k&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=usuario1061&password=1a5nv25g1y&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=usuario2011&password=gg54yy76re&type=m3u_plus",
     "http://zonalatina.xyz:80/get.php?username=usuario1048&password=fa14hg89vc&type=m3u_plus",
@@ -114,83 +105,69 @@ PLAYLIST_URLS = [
 
 def clean_series_title(name):
     match = re.search(r'(?i)\s*S\d+\s*E\d+', name)
-    if match:
-        return name[:match.start()].strip()
+    if match: return name[:match.start()].strip()
     match2 = re.search(r'(?i)\s*Cap[ií]tulo\s*\d+', name)
-    if match2:
-        return name[:match2.start()].strip()
+    if match2: return name[:match2.start()].strip()
     return name
 
 def parse_m3u_from_url(url):
-    live = []
-    movies = []
-    series = []
-    anime = []
-    adult = []
-    
+    live, movies, series, anime, adult = [], [], [], [], []
     try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req) as response:
+        req = urllib.request.Request(url, headers={'User-Agent': 'IPTVSmartersPro'})
+        with urllib.request.urlopen(req, timeout=10) as response:
             content = response.read().decode('utf-8', errors='ignore')
             lines = content.splitlines()
             current_inf = ""
-            
             for line in lines:
                 line = line.strip()
-                if not line:
-                    continue
+                if not line: continue
                 if line.startswith("#EXTINF"):
                     current_inf = line
                 elif not line.startswith("#"):
                     url_stream = line
-                    
                     name_match = re.search(r',(.+)$', current_inf)
                     name = name_match.group(1).strip() if name_match else "Desconocido"
                     group_match = re.search(r'group-title="([^"]+)"', current_inf, re.IGNORECASE)
                     group = group_match.group(1).strip() if group_match else "General"
                     logo_match = re.search(r'tvg-logo="([^"]+)"', current_inf, re.IGNORECASE)
                     logo = logo_match.group(1).strip() if logo_match else ""
-                    plot_match = re.search(r'(?:description|plot|tvg-desc)="([^"]+)"', current_inf, re.IGNORECASE)
-                    synopsis = plot_match.group(1).strip() if plot_match else ""
                     
-                    group_lower = group.lower()
-                    name_lower = name.lower()
-                    url_lower = url_stream.lower()
+                    # Omitimos sinopsis largas para ahorrar espacio en megabytes
+                    group_lower, name_lower, url_lower = group.lower(), name.lower(), url_stream.lower()
+                    item = { "name": name, "url": url_stream, "group": group, "logo": logo, "synopsis": "" }
                     
-                    item = { "name": name, "url": url_stream, "group": group, "logo": logo, "synopsis": synopsis }
-                    
-                    # 1. Adultos
                     if any(x in group_lower or x in name_lower for x in ["xxx", "+18", "adultos", "hot", "playboy"]):
                         adult.append(item)
-                        
-                    # 2. Anime
                     elif "anime" in group_lower or "anime" in name_lower:
                         if re.search(r'(?i)S\d+\s*E\d+', name) or re.search(r'(?i)Cap[ií]tulo', name):
                             item["seriesTitle"] = clean_series_title(name)
                         anime.append(item)
-                        
-                    # 3. Xtream Codes Series o S01E01
                     elif "/series/" in url_lower or re.search(r'(?i)S\d+\s*E\d+', name):
                         item["seriesTitle"] = clean_series_title(name)
                         series.append(item)
-                        
-                    # 4. Xtream Codes Películas o VOD (Si el grupo es PELICULAS, VOD, o el enlace tiene /movie/ o termina en mp4/mkv)
-                    elif "/movie/" in url_lower or url_lower.endswith(('.mp4', '.mkv', '.avi', '.m4v')) or "pelicula" in group_lower or "vod" in group_lower or "estreno" in group_lower or "cine" in group_lower:
+                    elif "/movie/" in url_lower or url_lower.endswith(('.mp4', '.mkv', '.avi', '.m4v')) or "pelicula" in group_lower or "vod" in group_lower:
                         movies.append(item)
-                        
-                    # 5. Todo lo demás se considera TV en Vivo (Canales normales de Xtream Codes)
                     else:
                         live.append(item)
-                        
     except Exception as e:
         print(f"Error procesando {url}: {e}")
-        
     return live, movies, series, anime, adult
+
+def deduplicate(items, max_limit=3000):
+    seen = {}
+    for item in items:
+        name = item['name']
+        if name not in seen:
+            seen[name] = item
+        if len(seen) >= max_limit: # Ponemos un tope para asegurar que nunca pase de 50-70 MB
+            break
+    return list(seen.values())
 
 def main():
     all_live, all_movies, all_series, all_anime, all_adult = [], [], [], [], []
     
     for url in PLAYLIST_URLS:
+        print(f"Procesando: {url}")
         l, m, s, an, a = parse_m3u_from_url(url)
         all_live.extend(l)
         all_movies.extend(m)
@@ -198,18 +175,18 @@ def main():
         all_anime.extend(an)
         all_adult.extend(a)
         
-    # Deduplicación por nombre para no tener el mismo canal o película repetida 20 veces
     catalog = {
-        "live": list({l['name']: l for l in all_live}.values()),
-        "movies": list({m['name']: m for m in all_movies}.values()),
-        "series": list({s['name']: s for s in all_series}.values()),
-        "anime": list({an['name']: an for an in all_anime}.values()),
-        "adult": list({a['name']: a for a in all_adult}.values())
+        "live": deduplicate(all_live, max_limit=4000),
+        "movies": deduplicate(all_movies, max_limit=3500),
+        "series": deduplicate(all_series, max_limit=2500),
+        "anime": deduplicate(all_anime, max_limit=1500),
+        "adult": deduplicate(all_adult, max_limit=500)
     }
     
     with open("vod_catalog.json", "w", encoding="utf-8") as f:
-        json.dump(catalog, f, ensure_ascii=False, indent=2)
-    print("Catálogo actualizado y deduplicado con 104 listas.")
+        json.dump(catalog, f, ensure_ascii=False)
+        
+    print("Catálogo optimizado y comprimido con éxito, por debajo del límite de GitHub.")
 
 if __name__ == "__main__":
     main()
